@@ -18,6 +18,7 @@ if len(sys.argv) < 3:
 
 country = sys.argv[1]
 type = sys.argv[2]
+
 web_url = 'https://www.post.at/p/c/liefereinschraenkungen-coronavirus'
 user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
 csv_url_regex = r'(https://assets.post.at/-/media/Dokumente/Corona/([0-9]{8})-Annahmestopp-' + type + 'International.csv)'
@@ -43,9 +44,9 @@ if len(matches) > 0:
         print('Downloading ' + csv_url)
         req = urllib.request.Request(csv_url, data=None, headers={'User-Agent': user_agent})
         csv_text = str(urllib.request.urlopen(req).read().decode(csv_charset))
-        country_locked = country.lower() in csv_text.strip().lower()
-        print('Country "' + country + '" locked: ' + str(country_locked))
-        if not country_locked:
+        country_blocked = country.lower() in csv_text.strip().lower()
+        print('Country "' + country + '" blocked: ' + str(country_blocked))
+        if not country_blocked:
             email_text = 'You can send your package to "' + country + '" as of "' + date_str + '"\n\nCheck for yourself here: ' + web_url
     except urllib.error.HTTPError as error:
         print('Uh oh... could not fetch CSV file. code "' + str(error.code) + '", reason: "' + error.reason + '"')
