@@ -4,6 +4,7 @@ from sending packages to with postal service Austria
 due to COVID-19.
 """
 
+import os
 import sys
 import re
 import urllib.request
@@ -62,7 +63,7 @@ if email_text is None:
 else:
     import configparser
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read(os.path.dirname(__file__) + os.path.sep + 'config.ini')
     data = urllib.parse.urlencode({
         'secret': config.get('mailer', 'secret'),
         'name': config.get('mailer', 'name'),
