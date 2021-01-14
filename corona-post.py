@@ -1,7 +1,7 @@
 """
-Postal service Austria Corona-locked checker
-
-Check if country is locked for sending packages with postal service Austria.
+Notify as soon as a country is not blocked anymore
+from sending packages to with postal service Austria
+due to COVID-19.
 """
 
 import sys
