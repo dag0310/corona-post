@@ -3,10 +3,12 @@ session_start();
 
 define('STORAGE_PATH', 'receivers.txt');
 
-$types = ['letter', 'package'];
-$countries_letter = str_getcsv(trim(utf8_encode(file_get_contents('20210112-Annahmestopp-BriefInternational.csv'))), "\n");
-$countries_package = str_getcsv(trim(utf8_encode(file_get_contents('20210112-Annahmestopp-PaketInternational.csv'))), "\n");
-$countries = array_unique(array_merge($countries_letter, $countries_package));
+$types = ['Brief', 'Paket'];
+$countries = [];
+foreach ($types as $t) {
+  $new_countries = str_getcsv(trim(utf8_encode(file_get_contents("20210112-Annahmestopp-{$t}International.csv"))), "\n");
+  $countries = array_unique(array_merge($countries, $new_countries));
+}
 try {
   collator_sort(collator_create('de'), $countries);
 } catch (Throwable $t) {
@@ -90,8 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <br>
     <select name="type" required>
       <option value="all">Brief & Packl</option>
-      <option value="letter">nur Brief</option>
-      <option value="package">nur Packl</option>
+      <?php foreach ($types as $t): ?>
+      <option value="<?= $t ?>"><?= $t ?></option>
+      <?php endforeach ?>
     </select>
     <br>
     <button type="submit">Gib Bescheid, wenn's so weit is!</button>
