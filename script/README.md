@@ -1,13 +1,13 @@
-# corona-post
+# corona-post script
 
-Notify as soon as a country is not blocked anymore from sending packages to with [postal service Austria](https://www.post.at) due to COVID-19.
+Sends emails to all lucky receivers.
+
+The script can be executed as a cron job to notify all receivers in a receivers.txt about the new status.
 
 ## Usage
 ```python
-python3 corona-post.py <country_name> <"Brief"|"Paket">
+python corona-post.py
 ```
-
-The country name must be specified according to the one specified in the CSV file which you can [download from the post.at website](https://www.post.at/p/c/liefereinschraenkungen-coronavirus).
 
 ## Requirements
 

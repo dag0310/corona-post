@@ -1,3 +1,7 @@
-# corona-post
+# corona-post app
 
-This is the app. Made for PHP 8.
+The app can be used to enter a new email address which should be notified by the script.
+
+# Requirements
+
+- PHP 7/8

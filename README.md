@@ -1,7 +1,9 @@
 # corona-post
 
-This repository consists of the [script](script) and the [app](app).
+Notify as soon as a country is not blocked anymore from sending packages to with [postal service Austria](https://www.post.at) due to COVID-19.
 
-The script can be executed as a cron job to notify all receivers in receivers.txt about the new status.
+[Data used from the post.at website](https://www.post.at/p/c/liefereinschraenkungen-coronavirus)
 
-The app can be used to enter a new email address which should be notified by the script.
+## Repo structure
+
+This repository consists of the [script](script) and the [app](app), for more information check out their respective README files.
