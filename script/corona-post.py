@@ -61,15 +61,15 @@ def notify_receivers(receivers, type, csv_url_regex):
     except urllib.error.HTTPError as error:
         print(error)
         send_admin_email('HTTP error "' + str(error.code) + '", reason: "' + error.reason + '". Could not fetch web page ' + web_url)
-        quit()
+        return
     except Exception as error:
         print(error)
         send_admin_email('Unknown error when trying to fetch web page ' + web_url)
-        quit()
+        return
 
     if len(matches) <= 0:
         send_admin_email('Could not find a CSV download URL on the web page ' + web_url)
-        quit()
+        return
 
     csv_url = matches[0][0]
     date_str_raw = matches[0][1]
@@ -102,11 +102,11 @@ def notify_receivers(receivers, type, csv_url_regex):
     except urllib.error.HTTPError as error:
         print(error)
         send_admin_email('HTTP error "' + str(error.code) + '", reason: "' + error.reason + '". Could not fetch CSV file for date ' + date_str + ' from URL: ' + csv_url + '\n\nPlease check ' + web_url)
-        quit()
+        return
     except Exception as error:
         print(error)
         send_admin_email('Some weird error occurred when reading CSV file ' + csv_url)
-        quit()
+        return
 
 
 def main():
