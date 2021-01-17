@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="utf-8">
   <title>corona-post</title>
-  <meta name="description" content="Wann kann mein Brief oder Paket wieder ins Ausland verschickt werden?">
+  <meta name="description" content="Wann kann mein Brief oder Paket mit der Post wieder ins Ausland verschickt werden?">
   <meta name="author" content="Daniel Geymayer">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta property="og:image" content="https://apps.geymayer.com/corona-post/favicon.png">
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
   <h1>corona-post</h1>
-  <h2>Wann kann mein Brief oder Paket von der Post wieder ins Ausland verschickt werden?</h2>
+  <h2>Wann kann mein Brief oder Paket mit der Post wieder ins Ausland verschickt werden?</h2>
   <p>
     <a href="https://www.post.at/p/c/liefereinschraenkungen-coronavirus" target="_blank">
       Wegen Corona is teilweise gerade schwer mit der Post was zu verschicken.
