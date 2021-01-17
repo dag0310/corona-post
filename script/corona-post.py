@@ -1,7 +1,6 @@
 """
-Notify as soon as a country is not blocked anymore
-from sending packages to with postal service Austria
-due to COVID-19.
+Notify as soon as a country is not blocked anymore due to COVID-19
+from sending packages to with postal service Austria.
 """
 
 import os
@@ -84,7 +83,7 @@ def notify_receivers(receivers, type, csv_url_regex):
             if environment != 'production':
                 print('Country "' + receiver['country'] + '" blocked: ' + str(country_blocked))
             if not country_blocked:
-                message = 'Dein ' + type + ' nach ' + receiver['country'] + ' kann verschickt werden seit ' + date_str + '.\n\nGeschickt von https://apps.geymayer.com/corona-post'
+                message = 'Dein ' + type + ' nach ' + receiver['country'] + ' kann verschickt werden seit ' + date_str + ' laut ' + web_url + '\n\nGeschickt von https://apps.geymayer.com/corona-post'
                 if send_email(receiver['email'], message):
                     with open(config[environment]['receivers_path'], "r+") as file:
                         lines = file.readlines()
