@@ -3,17 +3,18 @@ session_start();
 
 define('STORAGE_PATH', 'receivers.txt');
 
-function write_to_receivers_file($email, $country, $type) {
+function write_to_receivers_file($email, $country, $type, $messages) {
   if (empty($country)) {
-    return '';
+    return $messages;
   }
   $line = implode("\t", [$email, $country, $type]);
   if (strpos(file_get_contents(STORAGE_PATH), $line) === false) {
     file_put_contents(STORAGE_PATH, "{$line}\n", FILE_APPEND | LOCK_EX);
-    return "Daunksche, kriegst a Mail für $country, $type wenn's soweit is! ";
+    $messages[] = "Daunksche, kriegst a Mail für $country ($type) wenn's soweit is!";
   } else {
-    return "Ein Eintrag für $country als $type ist für dich bereits in der Liste. ";
+    $messages[] = "Ein Eintrag für $country ($type) ist für dich bereits in der Liste.";
   }
+  return $messages;
 }
 
 $letter_countries = str_getcsv(trim(utf8_encode(file_get_contents("20210112-Annahmestopp-BriefInternational.csv"))), "\n");
@@ -35,9 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } else if (!empty($_POST['package_country']) && !in_array($_POST['package_country'], $package_countries, true)) {
     $_SESSION['message'] = 'Ungültiges Paket-Land.';
   } else {
-    $_SESSION['message'] = '';
-    $_SESSION['message'] .= write_to_receivers_file(trim($_POST['email']), $_POST['letter_country'], 'Brief');
-    $_SESSION['message'] .= write_to_receivers_file(trim($_POST['email']), $_POST['package_country'], 'Paket');
+    $messages = write_to_receivers_file(trim($_POST['email']), $_POST['letter_country'], 'Brief', $messages);
+    $messages = write_to_receivers_file(trim($_POST['email']), $_POST['package_country'], 'Paket', $messages);
+    $_SESSION['message'] = implode('<br><br>', $messages);
   }
   header('Location: .');
   exit;
