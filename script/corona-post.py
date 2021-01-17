@@ -47,9 +47,11 @@ def send_email(to_email, message):
         print('Email could NOT be sent to "' + to_email + '"')
     return False
 
+
 def send_admin_email(message):
     print('Sending admin email with message "' + message + '"')
     return send_email(config['email']['admin_email'], message)
+
 
 def notify_receivers(receivers, type, csv_url_regex):
     matches = []
@@ -105,17 +107,19 @@ def notify_receivers(receivers, type, csv_url_regex):
         send_admin_email('Some weird error occurred when reading CSV file ' + csv_url)
         quit()
 
+
 def main():
     receivers = []
     with open(config[environment]['receivers_path'], newline='\n') as receivers_file:
         for row in csv.reader(receivers_file, delimiter='\t'):
-            receivers.append({ 'email': row[0], 'country': row[1], 'type': row[2] })
+            receivers.append({'email': row[0], 'country': row[1], 'type': row[2]})
 
     for type in types:
         notify_receivers(receivers, type, r'(https://assets.post.at/-/media/Dokumente/Corona/([0-9]{8})-Annahmestopp-' + type + 'International.csv)')
 
     print('Script finished.')
     return 0
+
 
 if __name__ == "__main__":
     main()
