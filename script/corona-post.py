@@ -24,6 +24,7 @@ types = ['Brief', 'Paket']
 web_url = 'https://www.post.at/p/c/liefereinschraenkungen-coronavirus'
 user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
 csv_charset = 'cp1252'
+csv_delimiter = '\t'
 
 
 def send_email(to_email, subject, message):
@@ -97,7 +98,7 @@ def notify_receivers(receivers, type, csv_url_regex):
                     file.seek(0)
                     file.truncate()
                     for line in lines:
-                        if line.strip("\n") != "\t".join([receiver['email'], receiver['country'], receiver['type']]):
+                        if line.strip("\n") != csv_delimiter.join([receiver['email'], receiver['country'], receiver['type']]):
                             file.write(line)
     except urllib.error.HTTPError as error:
         print(error)
@@ -112,7 +113,7 @@ def notify_receivers(receivers, type, csv_url_regex):
 def main():
     receivers = []
     with open(config[environment]['receivers_path'], newline='\n') as receivers_file:
-        for row in csv.reader(receivers_file, delimiter='\t'):
+        for row in csv.reader(receivers_file, delimiter=csv_delimiter):
             receivers.append({'email': row[0], 'country': row[1], 'type': row[2]})
 
     for type in types:
