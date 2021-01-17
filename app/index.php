@@ -87,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       Wegen Corona is teilweise gerade schwer mit der Post was zu verschicken.
     </a>
     Wenn du dich in die Mailingliste einträgst wirst du verständigt sobald's wieder geht.
+    <b>Wenn sich dein Zielland in keiner der Listen unten befindet, ist es vermutlich nicht gesperrt.</b>
   </p>
   <?php if (isset($_SESSION['message'])): ?>
   <p style="background-color: blue; color: white; padding: 10px;"><b><?= $_SESSION['message'] ?></b></p>
