@@ -52,9 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="icon" type="image/png" href="favicon.png" sizes="16x16">
   <link rel="shortcut icon" href="favicon.png">
   <style>
-    body { padding: 10px; }
-    input, select { padding: 5px; margin-bottom: 10px; }
-    button { padding: 5px; background-color: yellow; }
+    * { box-sizing: border-box; }
+    body { font-family: sans-serif; padding: 10px; max-width: 640px; }
+    input, select { padding: 10px; margin-bottom: 10px; }
+    button { padding: 10px; background-color: yellow; font-weight: bold; cursor: pointer; }
+    input, select, button { height: 40px; width: 100%; max-width: 400px; }
     h1 { margin-top: 0; }
   </style>
   <!-- Matomo -->
