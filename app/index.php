@@ -117,6 +117,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Auf dass ich de Seiten do bald wieder einrexen kann! 🍻
   </p>
   <p><a href="https://github.com/dag0310/corona-post" target="_blank">GitHub-Repo</a></p>
-  <p>Für Wünsche/Beschwerden findet man <a href="https://github.com/dag0310/" target="_blank">meine Mail-Adresse auf meinem GitHub-Profil</a></p>
 </body>
 </html>
