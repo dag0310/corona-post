@@ -85,6 +85,7 @@ def notify_receivers(receivers, type, csv_url_regex):
             for csv_line in csv_text.strip().split('\r\n'):
                 if receiver['country'].strip().lower() == csv_line.strip().lower():
                     country_blocked = True
+                    break
             if environment != 'production':
                 print('Country "' + receiver['country'] + '" blocked: ' + str(country_blocked))
             if country_blocked:
