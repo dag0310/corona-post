@@ -84,7 +84,7 @@ def notify_receivers(receivers, type, csv_url_regex):
             if environment != 'production':
                 print('Country "' + receiver['country'] + '" blocked: ' + str(country_blocked))
             if not country_blocked:
-                message = 'Du kannst dein ' + type + ' nach ' + receiver['country'] + ' schicken seit ' + date_str + '.\n\nGeschickt von https://apps.geymayer.com/corona-post'
+                message = 'Dein ' + type + ' nach ' + receiver['country'] + ' kann verschickt werden seit ' + date_str + '.\n\nGeschickt von https://apps.geymayer.com/corona-post'
                 if send_email(receiver['email'], message):
                     with open(config[environment]['receivers_path'], "r+") as file:
                         lines = file.readlines()
