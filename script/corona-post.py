@@ -82,16 +82,17 @@ def notify_receivers(receivers, type, csv_url_regex):
             country_blocked = receiver['country'].strip().lower() in csv_text.strip().lower()
             if environment != 'production':
                 print('Country "' + receiver['country'] + '" blocked: ' + str(country_blocked))
-            if not country_blocked:
-                message = 'Dein ' + type + ' nach ' + receiver['country'] + ' kann verschickt werden seit ' + date_str + ' laut ' + web_url + '\n\nGeschickt von https://apps.geymayer.com/corona-post'
-                if send_email(receiver['email'], message):
-                    with open(config[environment]['receivers_path'], "r+") as file:
-                        lines = file.readlines()
-                        file.seek(0)
-                        file.truncate()
-                        for line in lines:
-                            if line.strip("\n") != "\t".join([receiver['email'], receiver['country'], receiver['type']]):
-                                file.write(line)
+            if country_blocked:
+                continue
+            message = 'Dein ' + type + ' nach ' + receiver['country'] + ' kann verschickt werden seit ' + date_str + ' laut ' + web_url + '\n\nGeschickt von https://apps.geymayer.com/corona-post'
+            if send_email(receiver['email'], message):
+                with open(config[environment]['receivers_path'], "r+") as file:
+                    lines = file.readlines()
+                    file.seek(0)
+                    file.truncate()
+                    for line in lines:
+                        if line.strip("\n") != "\t".join([receiver['email'], receiver['country'], receiver['type']]):
+                            file.write(line)
     except urllib.error.HTTPError as error:
         print(error)
         send_admin_email('HTTP error "' + str(error.code) + '", reason: "' + error.reason + '". Could not fetch CSV file for date ' + date_str + ' from URL: ' + csv_url + '\n\nPlease check ' + web_url)
