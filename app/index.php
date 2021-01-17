@@ -10,7 +10,7 @@ function write_to_receivers_file($email, $country, $type) {
   $line = implode("\t", [$email, $country, $type]);
   if (strpos(file_get_contents(STORAGE_PATH), $line) === false) {
     file_put_contents(STORAGE_PATH, "{$line}\n", FILE_APPEND | LOCK_EX);
-    return "Daunksche, kriagst a Mail für $country wenn's soweit is! ";
+    return "Daunksche, kriegst a Mail für $country, $type wenn's soweit is! ";
   } else {
     return "Ein Eintrag für $country als $type ist für dich bereits in der Liste. ";
   }
