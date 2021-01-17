@@ -12,7 +12,7 @@ function write_to_receivers_file($email, $country, $type, $messages) {
     file_put_contents(STORAGE_PATH, "{$line}\n", FILE_APPEND | LOCK_EX);
     $messages[] = "Daunksche, kriegst a Mail für $country ($type) wenn's soweit is!";
   } else {
-    $messages[] = "Ein Eintrag für $country ($type) ist für dich bereits in der Liste.";
+    $messages[] = "Ein Eintrag für $country ($type) ist für dich bereits vorhanden.";
   }
   return $messages;
 }
@@ -59,9 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <style>
     * { box-sizing: border-box; }
     body { font-family: sans-serif; padding: 10px; max-width: 640px; }
-    input, select { padding: 10px; margin-bottom: 10px; }
-    button { padding: 10px; background-color: yellow; font-weight: bold; cursor: pointer; }
-    input, select, button { height: 40px; width: 100%; max-width: 400px; }
+    input, select { height: 40px; padding: 10px; margin-bottom: 10px; }
+    button { min-height: 40px; padding: 10px; background-color: yellow; font-size: 16px; font-weight: bold; cursor: pointer; }
+    input, select, button { width: 100%; max-width: 400px; border-radius: 5px; }
     h1 { margin-top: 0; }
   </style>
   <!-- Matomo -->
@@ -82,35 +82,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
   <h1>corona-post</h1>
-  <h2>Wann kann mein Brief oder Paket mit der Post wieder ins Ausland verschickt werden?</h2>
+  <h2>Benachrichtigt werden, wenn dein Brief oder Paket mit der Post wieder ins Ausland verschickt werden kann.</h2>
   <p>
-    <a href="https://www.post.at/p/c/liefereinschraenkungen-coronavirus" target="_blank">
-      Wegen Corona is teilweise gerade schwer mit der Post was zu verschicken.
-    </a>
-    Wenn du dich in die Mailingliste einträgst wirst du verständigt sobald's wieder geht.
-    <b>Wenn sich dein Zielland in keiner der Listen unten befindet, ist es vermutlich nicht gesperrt.</b>
+    Coronabedingt is teilweise gerade schwer mit der Post was zu verschicken.
+    Wenn du deine E-Mail-Adresse unten einträgst, wirst du verständigt, sobald's wieder geht.
+    <b>Wenn sich dein Zielland in keiner <a href="https://www.post.at/p/c/liefereinschraenkungen-coronavirus" target="_blank">der Listen</a> befindet, ist es vermutlich nicht gesperrt.</b>
   </p>
   <?php if (isset($_SESSION['message'])): ?>
   <p style="background-color: blue; color: white; padding: 10px;"><b><?= $_SESSION['message'] ?></b></p>
   <?php unset($_SESSION['message']); endif ?>
   <form method="post">
-    <input type="email" name="email" placeholder="Deine E-Mail bitte ..." autocomplete="email" required>
+    <label>
+      Deine E-Mail-Adresse bitte:<br>
+      <input type="email" name="email" placeholder="E-Mail eingeben ..." autocomplete="email" required>
+    </label>
     <br>
-    <select name="letter_country">
-      <option value="">gesperrtes Land für Brief?</option>
-      <?php foreach ($letter_countries as $country): ?>
-      <option value="<?= $country ?>"><?= $country ?></option>
-      <?php endforeach ?>
-    </select>
+    <label>
+      Land für <b>Briefversand</b> auswählen:<br>
+      <select name="letter_country">
+        <option value="">Bitte bei Bedarf auswählen ...</option>
+        <?php foreach ($letter_countries as $country): ?>
+        <option value="<?= $country ?>"><?= $country ?></option>
+        <?php endforeach ?>
+      </select>
+    </label>
     <br>
-    <select name="package_country">
-      <option value="">gesperrtes Land für Paket?</option>
-      <?php foreach ($package_countries as $country): ?>
-      <option value="<?= $country ?>"><?= $country ?></option>
-      <?php endforeach ?>
-    </select>
+    <label>
+      und/oder Land für <b>Paketversand</b> auswählen:<br>
+      <select name="package_country">
+        <option value="">Bitte bei Bedarf auswählen ...</option>
+        <?php foreach ($package_countries as $country): ?>
+        <option value="<?= $country ?>"><?= $country ?></option>
+        <?php endforeach ?>
+      </select>
+    </label>
     <br>
-    <button type="submit">Gib Bescheid, wenn's so weit is!</button>
+    <button type="submit">Gib mir Bescheid, wenn's wieder möglich ist was zu verschicken!</button>
   </form>
   <p>
     E-Mail-Adressen werden eh kloa DSGVO-konform in keiner Weise weitergegeben.<br>
