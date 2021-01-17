@@ -79,7 +79,10 @@ def notify_receivers(receivers, type, csv_url_regex):
         for receiver in receivers:
             if receiver['type'] != type:
                 continue
-            country_blocked = receiver['country'].strip().lower() in csv_text.strip().lower()
+            country_blocked = False
+            for csv_line in csv_text.strip().split('\r\n'):
+                if receiver['country'].strip().lower() == csv_line.strip().lower():
+                    country_blocked = True
             if environment != 'production':
                 print('Country "' + receiver['country'] + '" blocked: ' + str(country_blocked))
             if country_blocked:
