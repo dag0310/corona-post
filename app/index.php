@@ -32,7 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $type = $_POST['type'];
   foreach (($type === 'all') ? $types : [$type] as $t) {
     $line = implode("\t", [$email, $country, $t]);
-    file_put_contents(STORAGE_PATH, "{$line}\n", FILE_APPEND | LOCK_EX);
+    if (strpos(file_get_contents(STORAGE_PATH), $line) === false) {
+      file_put_contents(STORAGE_PATH, "{$line}\n", FILE_APPEND | LOCK_EX);
+    }
   }
   $_SESSION['success'] = 'true';
   header('Location: .');
