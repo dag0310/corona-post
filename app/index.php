@@ -84,6 +84,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </a>
     Wenn du dich in die Mailingliste einträgst wirst du verständigt sobald's wieder geht.
   </p>
+  <?php if (isset($_SESSION['success'])): unset($_SESSION['success']); ?>
+  <p style="background-color: blue; color: white; padding: 10px;"><b>Daunksche, kriagst a Mail wenn's soweit is!</b></p>
+  <?php endif ?>
   <form method="post">
     <input type="email" name="email" placeholder="Deine E-Mail bitte ..." autocomplete="email" required>
     <br>
@@ -103,9 +106,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <br>
     <button type="submit">Gib Bescheid, wenn's so weit is!</button>
   </form>
-  <?php if (isset($_SESSION['success'])): unset($_SESSION['success']); ?>
-  <p><b>Daunksche, kriagst a Mail wenn's soweit is!</b></p>
-  <?php endif ?>
   <p>
     E-Mail-Adressen werden eh kloa DSGVO-konform in keiner Weise weitergegeben.<br>
     Nachdem die Mail an dich verschickt worden is, wird die Adresse auch wieder gelöscht.<br>
