@@ -12,6 +12,9 @@ import configparser
 import urllib.request
 import urllib.parse
 import urllib.error
+import smtplib
+import ssl
+from email.message import EmailMessage
 
 environment = sys.argv[1] if len(sys.argv) > 1 else 'production'
 
@@ -23,24 +26,29 @@ web_url = 'https://www.post.at/p/c/liefereinschraenkungen-coronavirus'
 user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
 csv_charset = 'cp1252'
 
-def send_email(name, email, message):
-    data = urllib.parse.urlencode({
-        'secret': config.get('mailer', 'secret'),
-        'subject': 'corona-post',
-        'name': name,
-        'email': email,
-        'message': message,
-    })
+
+def send_email(to_email, message):
+    msg = EmailMessage()
+    msg['Subject'] = config['email']['from_name']
+    msg['From'] = config['email']['from_name'] + " <" + config['email']['from_email'] + ">"
+    msg['To'] = to_email
+    msg.set_content(message)
     try:
-        urllib.request.urlopen(urllib.request.Request(config.get('mailer', 'api_url'), data=data.encode()))
-        print('Email sent to "' + email + '"')
+        context = ssl.create_default_context()
+        with smtplib.SMTP(config['email']['smtp_host'], config['email']['smtp_port']) as server:
+            server.ehlo()  # Can be omitted
+            server.starttls(context=context)
+            server.ehlo()  # Can be omitted
+            server.login(config['email']['smtp_user'], config['email']['smtp_pass'])
+            server.send_message(msg)
+            print('Email sent to "' + to_email + '"')
     except Exception as error:
         print(error)
-        print('Email could NOT be sent to "' + email + '"')
+        print('Email could NOT be sent to "' + to_email + '"')
 
 def send_admin_email(message):
-    print('Sending admin email: ' + message)
-    send_email(config.get('mailer', 'name'), config.get('mailer', 'email'), message)
+    print('Sending admin email with message "' + message + '"')
+    send_email(config['email']['admin_email'], message)
 
 def notify_receivers(receivers, type, csv_url_regex):
     matches = []
@@ -75,7 +83,7 @@ def notify_receivers(receivers, type, csv_url_regex):
                 print('Country "' + receiver['country'] + '" blocked: ' + str(country_blocked))
             if not country_blocked:
                 message = 'Du kannst dein ' + type + ' nach ' + receiver['country'] + ' schicken seit ' + date_str + '.\n\nGeschickt von https://apps.geymayer.com/corona-post'
-                send_email(receiver['email'], receiver['email'], message)
+                send_email(receiver['email'], message)
     except urllib.error.HTTPError as error:
         print(error)
         send_admin_email('HTTP error "' + str(error.code) + '", reason: "' + error.reason + '". Could not fetch CSV file for date ' + date_str + ' from URL: ' + csv_url + '\n\nPlease check ' + web_url)
