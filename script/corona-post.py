@@ -18,7 +18,7 @@ from email.message import EmailMessage
 environment = sys.argv[1] if len(sys.argv) > 1 else 'production'
 
 config = configparser.ConfigParser()
-config.read(os.path.dirname(__file__) + os.path.sep + 'config.ini')
+config.read(os.path.join(os.path.dirname(__file__), 'config.ini'))
 
 types = ['Brief', 'Paket']
 web_url = 'https://www.post.at/p/c/liefereinschraenkungen-coronavirus'
