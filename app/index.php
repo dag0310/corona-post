@@ -3,42 +3,44 @@ session_start();
 
 define('STORAGE_PATH', 'receivers.txt');
 
-$types = ['Brief', 'Paket'];
-$countries = [];
-foreach ($types as $t) {
-  $new_countries = str_getcsv(trim(utf8_encode(file_get_contents("20210112-Annahmestopp-{$t}International.csv"))), "\n");
-  $countries = array_unique(array_merge($countries, $new_countries));
+function write_to_receivers_file($email, $country, $type) {
+  if (empty($country)) {
+    return '';
+  }
+  $line = implode("\t", [$email, $country, $type]);
+  if (strpos(file_get_contents(STORAGE_PATH), $line) === false) {
+    file_put_contents(STORAGE_PATH, "{$line}\n", FILE_APPEND | LOCK_EX);
+    return "Daunksche, kriagst a Mail für $country wenn's soweit is! ";
+  } else {
+    return "Ein Eintrag für $country als $type ist für dich bereits in der Liste. ";
+  }
 }
+
+$letter_countries = str_getcsv(trim(utf8_encode(file_get_contents("20210112-Annahmestopp-BriefInternational.csv"))), "\n");
+$package_countries = str_getcsv(trim(utf8_encode(file_get_contents("20210112-Annahmestopp-PaketInternational.csv"))), "\n");
 try {
-  collator_sort(collator_create('de'), $countries);
+  collator_sort(collator_create('de'), $letter_countries);
+  collator_sort(collator_create('de'), $package_countries);
 } catch (Throwable $t) {
-  sort($countries);
+  sort($letter_countries);
+  sort($package_countries);
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (!isset($_POST['email']) || !isset($_POST['country']) || !isset($_POST['type'])) {
-    die('Missing form data.');
+  if (empty($_POST['email']) || strpos($_POST['email'], '@') === false) {
+    $_SESSION['message'] = 'Ungültige E-Mail-Adresse.';
+  } else if (empty($_POST['letter_country']) && empty($_POST['package_country'])) {
+    $_SESSION['message'] = 'Bitte zumindest ein Brief- oder Paket-Land auswählen!';
+  } else if (!empty($_POST['letter_country']) && !in_array($_POST['letter_country'], $letter_countries, true)) {
+    $_SESSION['message'] = 'Ungültiges Brief-Land.';
+  } else if (!empty($_POST['package_country']) && !in_array($_POST['package_country'], $package_countries, true)) {
+    $_SESSION['message'] = 'Ungültiges Paket-Land.';
+  } else {
+    $_SESSION['message'] = '';
+    $_SESSION['message'] .= write_to_receivers_file(trim($_POST['email']), $_POST['letter_country'], 'Brief');
+    $_SESSION['message'] .= write_to_receivers_file(trim($_POST['email']), $_POST['package_country'], 'Paket');
   }
-  if (strpos($_POST['email'], '@') === false) {
-    die('@ in email missing.');
-  }
-  if (!in_array($_POST['country'], $countries, true)) {
-    die('Invalid country.');
-  }
-  if ($_POST['type'] !== 'all' && !in_array($_POST['type'], $types, true)) {
-    die('Invalid type.');
-  }
-  $email = trim($_POST['email']);
-  $country = $_POST['country'];
-  $type = $_POST['type'];
-  foreach (($type === 'all') ? $types : [$type] as $t) {
-    $line = implode("\t", [$email, $country, $t]);
-    if (strpos(file_get_contents(STORAGE_PATH), $line) === false) {
-      file_put_contents(STORAGE_PATH, "{$line}\n", FILE_APPEND | LOCK_EX);
-    }
-  }
-  $_SESSION['success'] = 'true';
   header('Location: .');
-  exit();
+  exit;
 }
 ?>
 <!doctype html>
@@ -86,23 +88,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </a>
     Wenn du dich in die Mailingliste einträgst wirst du verständigt sobald's wieder geht.
   </p>
-  <?php if (isset($_SESSION['success'])): unset($_SESSION['success']); ?>
-  <p style="background-color: blue; color: white; padding: 10px;"><b>Daunksche, kriagst a Mail wenn's soweit is!</b></p>
-  <?php endif ?>
+  <?php if (isset($_SESSION['message'])): ?>
+  <p style="background-color: blue; color: white; padding: 10px;"><b><?= $_SESSION['message'] ?></b></p>
+  <?php unset($_SESSION['message']); endif ?>
   <form method="post">
     <input type="email" name="email" placeholder="Deine E-Mail bitte ..." autocomplete="email" required>
     <br>
-    <select name="country" required>
-      <option value="">Wohin soll's gehen?</option>
-      <?php foreach ($countries as $country): ?>
+    <select name="letter_country">
+      <option value="">gesperrtes Land für Brief?</option>
+      <?php foreach ($letter_countries as $country): ?>
       <option value="<?= $country ?>"><?= $country ?></option>
       <?php endforeach ?>
     </select>
     <br>
-    <select name="type" required>
-      <option value="all">Brief & Paket</option>
-      <?php foreach ($types as $t): ?>
-      <option value="<?= $t ?>"><?= $t ?></option>
+    <select name="package_country">
+      <option value="">gesperrtes Land für Paket?</option>
+      <?php foreach ($package_countries as $country): ?>
+      <option value="<?= $country ?>"><?= $country ?></option>
       <?php endforeach ?>
     </select>
     <br>
