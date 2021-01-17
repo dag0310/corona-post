@@ -103,15 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <p><b>Daunksche, kriagst a Mail wenn's soweit is!</b></p>
   <?php endif ?>
   <p>
-    Mails werden eh kloa DSGVO-konform in keiner Weise weitergegeben.<br>
-    Gelöscht werden's dann auch wieder.<br>
+    E-Mail-Adressen werden eh kloa DSGVO-konform in keiner Weise weitergegeben.<br>
+    Nachdem die Mail verschickt worden is, wird die Adresse auch wieder gelöscht.<br>
     Auf dass ich de Seiten do bald wieder einrexen kann! 🍻
   </p>
-  <p>
-  <ul>
-    <li><a href="https://github.com/dag0310/corona-post" target="_blank">GitHub-Repo</a></li>
-    <li>von <a href="https://geymayer.com" target="_blank">Daniel Geymayer</a></li>
-    <li>E-Mail: <i>Vorname</i>@<i>Nachname</i>.com
-  </ul>
+  <p><a href="https://github.com/dag0310/corona-post" target="_blank">GitHub-Repo</a></p>
 </body>
 </html>

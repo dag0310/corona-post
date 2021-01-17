@@ -42,13 +42,15 @@ def send_email(to_email, message):
             server.login(config['email']['smtp_user'], config['email']['smtp_pass'])
             server.send_message(msg)
             print('Email sent to "' + to_email + '"')
+            return True
     except Exception as error:
         print(error)
         print('Email could NOT be sent to "' + to_email + '"')
+    return False
 
 def send_admin_email(message):
     print('Sending admin email with message "' + message + '"')
-    send_email(config['email']['admin_email'], message)
+    return send_email(config['email']['admin_email'], message)
 
 def notify_receivers(receivers, type, csv_url_regex):
     matches = []
@@ -83,7 +85,14 @@ def notify_receivers(receivers, type, csv_url_regex):
                 print('Country "' + receiver['country'] + '" blocked: ' + str(country_blocked))
             if not country_blocked:
                 message = 'Du kannst dein ' + type + ' nach ' + receiver['country'] + ' schicken seit ' + date_str + '.\n\nGeschickt von https://apps.geymayer.com/corona-post'
-                send_email(receiver['email'], message)
+                if send_email(receiver['email'], message):
+                    with open(config[environment]['receivers_path'], "r+") as file:
+                        lines = file.readlines()
+                        file.seek(0)
+                        file.truncate()
+                        for line in lines:
+                            if line.strip("\n") != "\t".join([receiver['email'], receiver['country'], receiver['type']]):
+                                file.write(line)
     except urllib.error.HTTPError as error:
         print(error)
         send_admin_email('HTTP error "' + str(error.code) + '", reason: "' + error.reason + '". Could not fetch CSV file for date ' + date_str + ' from URL: ' + csv_url + '\n\nPlease check ' + web_url)
