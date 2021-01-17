@@ -26,9 +26,9 @@ user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 
 csv_charset = 'cp1252'
 
 
-def send_email(to_email, message):
+def send_email(to_email, subject, message):
     msg = EmailMessage()
-    msg['Subject'] = config['email']['from_name']
+    msg['Subject'] = subject
     msg['From'] = config['email']['from_name'] + " <" + config['email']['from_email'] + ">"
     msg['To'] = to_email
     msg.set_content(message)
@@ -50,7 +50,7 @@ def send_email(to_email, message):
 
 def send_admin_email(message):
     print('Sending admin email with message "' + message + '"')
-    return send_email(config['email']['admin_email'], message)
+    return send_email(config['email']['admin_email'], "Bericht für den Admin", message)
 
 
 def notify_receivers(receivers, type, csv_url_regex):
@@ -90,7 +90,7 @@ def notify_receivers(receivers, type, csv_url_regex):
             if country_blocked:
                 continue
             message = 'Dein ' + type + ' nach ' + receiver['country'] + ' kann verschickt werden seit ' + date_str + ' laut ' + web_url + '\n\nGeschickt von https://apps.geymayer.com/corona-post'
-            if send_email(receiver['email'], message):
+            if send_email(receiver['email'], "Dein " + type + " kann wieder verschickt werden!", message):
                 with open(config[environment]['receivers_path'], "r+") as file:
                     lines = file.readlines()
                     file.seek(0)
