@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="utf-8">
   <title>corona-post</title>
-  <meta name="description" content="Wann kann ich mein Brief oder Packl wieder ins Ausland schicken?">
+  <meta name="description" content="Wann kann mein Brief oder Paket wieder ins Ausland verschickt werden?">
   <meta name="author" content="Daniel Geymayer">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta property="og:image" content="https://apps.geymayer.com/corona-post/favicon.png">
@@ -77,13 +77,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
   <h1>corona-post</h1>
-  <h2>Wann kann ich mein Brief oder Packl wieder ins Ausland schicken?</h2>
+  <h2>Wann kann mein Brief oder Paket von der Post wieder ins Ausland verschickt werden?</h2>
   <p>
-    Wegen Corona is teilweise gerade schwer mit der Post was zu verschicken.<br>
-    Wenn du dich in die Mailingliste einträgst wirst verständigt sobald's wieder geht.
+    <a href="https://www.post.at/p/c/liefereinschraenkungen-coronavirus" target="_blank">
+      Wegen Corona is teilweise gerade schwer mit der Post was zu verschicken.
+    </a>
+    Wenn du dich in die Mailingliste einträgst wirst du verständigt sobald's wieder geht.
   </p>
   <form method="post">
-    <input type="email" name="email" placeholder="Dei E-Mail bitte hier" autocomplete="email" required>
+    <input type="email" name="email" placeholder="Deine E-Mail bitte ..." autocomplete="email" required>
     <br>
     <select name="country" required>
       <option value="">Wohin soll's gehen?</option>
@@ -93,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </select>
     <br>
     <select name="type" required>
-      <option value="all">Brief & Packl</option>
+      <option value="all">Brief & Paket</option>
       <?php foreach ($types as $t): ?>
       <option value="<?= $t ?>"><?= $t ?></option>
       <?php endforeach ?>
@@ -106,9 +108,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php endif ?>
   <p>
     E-Mail-Adressen werden eh kloa DSGVO-konform in keiner Weise weitergegeben.<br>
-    Nachdem die Mail verschickt worden is, wird die Adresse auch wieder gelöscht.<br>
+    Nachdem die Mail an dich verschickt worden is, wird die Adresse auch wieder gelöscht.<br>
     Auf dass ich de Seiten do bald wieder einrexen kann! 🍻
   </p>
   <p><a href="https://github.com/dag0310/corona-post" target="_blank">GitHub-Repo</a></p>
+  <p>Für Wünsche/Beschwerden findet man <a href="https://github.com/dag0310/" target="_blank">meine Mail-Adresse auf meinem GitHub-Profil</a></p>
 </body>
 </html>
