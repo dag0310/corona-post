@@ -25,6 +25,7 @@ web_url = 'https://www.post.at/p/c/liefereinschraenkungen-coronavirus'
 user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
 csv_charset = 'cp1252'
 csv_delimiter = '\t'
+csv_newline = '\r\n'
 
 
 def send_email(to_email, subject, message):
@@ -83,7 +84,7 @@ def notify_receivers(receivers, type, csv_url_regex):
             if receiver['type'] != type:
                 continue
             country_blocked = False
-            for csv_line in csv_text.strip().split('\r\n'):
+            for csv_line in csv_text.strip().split(csv_newline):
                 if receiver['country'].strip().lower() == csv_line.strip().lower():
                     country_blocked = True
                     break
