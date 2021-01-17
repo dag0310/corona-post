@@ -95,7 +95,7 @@ def notify_receivers(receivers, type, csv_url_regex):
 
 def main():
     receivers = []
-    with open(config.get(environment, 'receivers_path'), newline='\n') as receivers_file:
+    with open(config[environment]['receivers_path'], newline='\n') as receivers_file:
         for row in csv.reader(receivers_file, delimiter='\t'):
             receivers.append({ 'email': row[0], 'country': row[1], 'type': row[2] })
 
