@@ -82,10 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
   <h1>corona-post</h1>
-  <h2>Benachrichtigt werden, wenn dein Brief oder Paket mit der Post wieder ins Ausland verschickt werden kann.</h2>
+  <h2>Benachrichtigt werden, wenn dein Brief oder Paket mit der österreichischen Post wieder ins Ausland verschickt werden kann.</h2>
   <p>
     Coronabedingt is teilweise gerade schwer mit der Post was zu verschicken.
-    Wenn du deine E-Mail-Adresse unten einträgst, wirst du verständigt, sobald's wieder geht.
+    Wenn du deine E-Mail-Adresse unten einträgst, wirst du verständigt, sobald's wieder geht.<br>
     <b>Wenn sich dein Zielland in keiner <a href="https://www.post.at/p/c/liefereinschraenkungen-coronavirus" target="_blank">der Listen</a> befindet, ist es vermutlich nicht gesperrt.</b>
   </p>
   <?php if (isset($_SESSION['message'])): ?>
@@ -93,14 +93,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php unset($_SESSION['message']); endif ?>
   <form method="post">
     <label>
-      Deine E-Mail-Adresse bitte:<br>
+      Deine E-Mail-Adresse:<br>
       <input type="email" name="email" placeholder="E-Mail eingeben ..." autocomplete="email" required>
     </label>
     <br>
     <label>
-      Land für <b>Briefversand</b> auswählen:<br>
+      Zielland für <b>Briefversand</b>:<br>
       <select name="letter_country">
-        <option value="">Bitte bei Bedarf auswählen ...</option>
+        <option value="">Auswählen bei Bedarf ...</option>
         <?php foreach ($letter_countries as $country): ?>
         <option value="<?= $country ?>"><?= $country ?></option>
         <?php endforeach ?>
@@ -108,9 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </label>
     <br>
     <label>
-      und/oder Land für <b>Paketversand</b> auswählen:<br>
+      und/oder Zielland für <b>Paketversand</b>:<br>
       <select name="package_country">
-        <option value="">Bitte bei Bedarf auswählen ...</option>
+        <option value="">Auswählen bei Bedarf ...</option>
         <?php foreach ($package_countries as $country): ?>
         <option value="<?= $country ?>"><?= $country ?></option>
         <?php endforeach ?>
