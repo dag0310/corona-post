@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } else if (!empty($_POST['package_country']) && !in_array($_POST['package_country'], $package_countries, true)) {
     $_SESSION['message'] = 'Ungültiges Paket-Land.';
   } else {
+    $messages = [];
     $messages = write_to_receivers_file(trim($_POST['email']), $_POST['letter_country'], 'Brief', $messages);
     $messages = write_to_receivers_file(trim($_POST['email']), $_POST['package_country'], 'Paket', $messages);
     $_SESSION['message'] = implode('<br><br>', $messages);
